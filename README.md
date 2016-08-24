@@ -6,7 +6,6 @@ An example calculus query:
 - Original query: 2 * (23/(3*3))- 23 * (2*3)
 - With encoding: MiAqICgyMy8oMyozKSktIDIzICogKDIqMyk=
 
-
 # API Description
 
 Endpoint:
