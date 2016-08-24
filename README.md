@@ -9,11 +9,12 @@ An example calculus query:
 
 # API Description
 
-## Endpoint:
+Endpoint:
+
 - GET /calculus?query=[input]
 - The input can be expected to be UTF-8 with BASE64 encoding
 
-###  Return:
+Return:
 
 On success: JSON response of format:
 
