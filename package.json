@@ -1,0 +1,25 @@
+{
+  "name": "nodeculator",
+  "version": "1.0.0",
+  "description": "A simple calculator that gets string math expressions and returns result. Supported operators: + - * / ( )",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "nodemon"
+  },
+  "keywords": [
+    "math",
+    "calculator",
+    "expression"
+  ],
+  "author": "Nathan Dao",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.0.2"
+  },
+  "dependencies": {
+    "restify": "^4.1.1"
+  }
+}
