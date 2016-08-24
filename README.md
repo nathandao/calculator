@@ -22,7 +22,7 @@ On success: JSON response of format:
 { error: false, result: number }
 ```
 
-On error: Either a HTTP error code or:
+On error:
 
 ```
 { error: true, message: string }
