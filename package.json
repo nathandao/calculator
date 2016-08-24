@@ -2,6 +2,9 @@
   "name": "nodeculator",
   "version": "1.0.0",
   "description": "A simple calculator that gets string math expressions and returns result. Supported operators: + - * / ( )",
+  "engines": {
+    "node": "6.4.0"
+  },
   "main": "index.js",
   "scripts": {
     "test": "mocha",
