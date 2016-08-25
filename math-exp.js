@@ -18,20 +18,20 @@ class MathExp {
    * @returns {string}
    */
   getErrorMessage() {
-    let exp = this.expression,
-        errMessage = null,
-        pendingBrackets = 0,
-        iteratingFloat = false,
-        allowedChars = regExpOr(regPlusMinus, regDigits, regBracketOpen);
+    let errMessage = null;
 
     if (this.expression === '') {
       errMessage = 'missing expression';
     } else {
+      let exp = this.expression,
+          allowedChars = regExpOr(regPlusMinus, regDigits, regBracketOpen),
+          pendingBrackets = 0,
+          iteratingDecimal = false;
 
       for (let i = 0; i < exp.length; i++) {
         let currentChar = exp[i],
             nextChar = exp[i + 1],
-            opts = {};
+            disallowDigit = false;
 
         // Skip white space.
         if (currentChar === ' ') continue;
@@ -42,14 +42,15 @@ class MathExp {
         } else if (currentChar === ')') {
           pendingBrackets--;
         } else if (currentChar === '.') {
-          iteratingFloat = true;
-        } else if(nextChar && nextChar.match(regExpOr(regOps, regBrackets, regSpace))) {
-          iteratingFloat = false;
+          iteratingDecimal = true;
+        } else if (nextChar && nextChar.match(regExpOr(regOps, regBrackets, regSpace))) {
+          iteratingDecimal = false;
         }
 
-        // Last character can only be digit of closing bracket.
-        if (i === exp.length - 1)
+        // Last character can only be digit or closing bracket.
+        if (i === exp.length - 1) {
           allowedChars = regExpOr(regBracketClose, regDigits);
+        }
 
         // Terminate uppon error.
         if (pendingBrackets < 0 || !currentChar.match(allowedChars)) {
@@ -58,11 +59,16 @@ class MathExp {
         }
 
         // No white space between two consecutive digits.
-        if (currentChar.match(regDigits) && nextChar === ' ') opts.noDigit = true;
-        opts.iteratingFloat = iteratingFloat;
-        allowedChars = getNextAllowedChars(currentChar, opts);
-      }
+        if (currentChar.match(regDigits) && nextChar === ' ') {
+          disallowDigit = true;
+        }
 
+        // Update the next allowed characters regex.
+        allowedChars = getNextAllowedChars(currentChar, {
+          disallowDigit,
+          iteratingDecimal
+        });
+      }
       if (pendingBrackets > 0 && !errMessage) {
         errMessage = 'missing closing bracket(s)';
       }
@@ -89,10 +95,11 @@ class MathExp {
 
 /**
  * Combine multiple regular expressions using or.
- * @returns {RegExp} 
+ * @returns {RegExp}
  */
 function regExpOr() {
   let combined = null;
+
   for (let i in arguments) {
     if (!combined) {
       combined = arguments[i]
@@ -100,6 +107,7 @@ function regExpOr() {
       combined = new RegExp(combined.source + '|' + arguments[i].source);
     }
   }
+
   return combined;
 }
 
@@ -107,18 +115,18 @@ function regExpOr() {
  * Helper function to get the next allowed characters in the expression iterator
  * based on the current character and additional options.
  * @param {char} currentChar
- * @param {object} {noDigit: {boolean}, iteratingFloat: {boolean}}
+ * @param {object} {disallowDigit: {boolean}, iteratingDecimal: {boolean}}
  * @returns {RegExp}
  */
 function getNextAllowedChars(currentChar, opts) {
-  let noDigit = opts.noDigit || false,
-      iteratingFloat = opts.iteratingFloat || false;
+  let disallowDigit = opts.disallowDigit || false,
+      iteratingDecimal = opts.iteratingDecimal || false;
 
-  if (iteratingFloat) {
+  if (iteratingDecimal) {
     // When iterating a float number, only allow following digits after the "."
     return regDigits;
 
-  } else if (currentChar.match(regDigits) && noDigit) {
+  } else if (currentChar.match(regDigits) && disallowDigit) {
     // Disallow space between 2 consecutive numbers.
     return regExpOr(regBracketClose, regOps);
 

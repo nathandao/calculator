@@ -1,5 +1,5 @@
-var restify = require('restify');
-var MathExp = require('./math-exp');
+let restify = require('restify');
+let MathExp = require('./math-exp');
 
 let server = restify.createServer();
 let port = process.env.NODE_ENV === 'production' ? 80 : 8080;
@@ -13,11 +13,9 @@ server.get('/', (req, res, next) => {
 
 server.get('/calculus', (req, res, next) => {
   let q = req.query.query || '',
-      bf = new Buffer(q, 'base64'),
-      expString = bf.toString('utf8'),
-      exp = new MathExp(expString);
-
-  let errMessage = exp.getErrorMessage();
+      expString = new Buffer(q, 'base64').toString('utf8'),
+      exp = new MathExp(expString),
+      errMessage = exp.getErrorMessage();
 
   if (errMessage) {
     res.send({
@@ -33,5 +31,4 @@ server.get('/calculus', (req, res, next) => {
   next();
 })
 
-// Export for tests.
 module.exports = server;

@@ -7,7 +7,6 @@ let server = require('../server');
 chai.use(chaiHttp);
 
 describe('GET /calculus', () => {
-
   describe('when expression is invalid', () => {
     it('should return error json', (done) => {
       let exp = {

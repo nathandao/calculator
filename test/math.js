@@ -4,6 +4,7 @@ let expect = require('chai').expect;
 describe('MathExp', () => {
   it('should show error when expression is missing', () => {
     let exp = new MathExp(' ');
+
     expect(exp.getErrorMessage()).to.equal('missing expression');
     expect(exp.evaluate()).to.equal(undefined);
   });
@@ -20,6 +21,7 @@ describe('MathExp', () => {
   invalidExps.forEach(invalidExp => {
     it('should detect invalid expression ' + invalidExp.arg, () => {
       let exp = new MathExp(invalidExp.arg);
+
       expect(exp.getErrorMessage()).to.equal(invalidExp.expectedError);
       expect(exp.evaluate()).to.equal(undefined);
     });
@@ -29,6 +31,7 @@ describe('MathExp', () => {
     let validExp = ' - 12*   1.4 / ((-  15- 17  ) * 1.66/ (  11 + 5  ))';
     let expectedResult = eval(validExp);
     let exp = new MathExp(validExp);
+
     expect(exp.getErrorMessage()).to.equal(null);
     expect(exp.evaluate()).to.equal(expectedResult);
   });
