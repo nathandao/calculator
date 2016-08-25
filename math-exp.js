@@ -84,10 +84,9 @@ class MathExp {
   evaluate() {
     if (this.getErrorMessage() === null) {
       try {
-        this.result = eval(this.expression);
-        return this.result;
+        return eval(this.expression);
       } catch(err) {
-        console.log(err)
+        console.log(err);
       }
     }
   }
