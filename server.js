@@ -23,12 +23,15 @@ server.get('/calculus', (req, res, next) => {
       message: errMessage,
     })
   } else {
+    let result = exp.evaluate();
+    if (result === Infinity) result = 'Infinity';
     res.send({
       error: false,
-      result: exp.evaluate(),
+      result,
     });
   }
+
   next();
-})
+});
 
 module.exports = server;

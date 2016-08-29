@@ -63,4 +63,24 @@ describe('GET /calculus', () => {
         });
     });
   })
-})
+
+  describe('when expression contains division by 0', () => {
+    it('should return correct json value', done => {
+      let exp = '-12 * 89 / (56 - 56) + 17 * 79';
+      let expectedResult = 'Infinity';
+      let encodedExp = new Buffer(exp).toString('base64');
+
+      chai.request(server)
+        .get('/calculus')
+        .query({ query: encodedExp })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.eql({
+            error: false,
+            result: 'Infinity'
+          });
+        });
+      done();
+    });
+  });
+});
